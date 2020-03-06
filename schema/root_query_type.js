@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLList } = graphql; //List allows data to be returned as an array
+const { GraphQLObjectType, GraphQLList, GraphQLNonNull, GraphQLID } = graphql; //List allows data to be returned as an array
 
 // import mongoose so we can access our User model in our resolver functions
 const mongoose = require("mongoose");
@@ -20,6 +20,17 @@ const RootQuery = new GraphQLObjectType({
       resolve() {
         // This is just a mongoose method
         return User.find({});
+      }
+    }, 
+    user: {
+      // We are now querying for a single User, so we don't need to wrap the type in GraphQLList
+      type: UserType,
+      // We must define a type for the arguments which will be passed in to the query.
+      // GraphQLNonNull specifies that the argument must be include
+      args: { id: { type: new GraphQLNonNull(GraphQLID) }}, 
+       // The args argument represents the *actual* arguments passed into the query
+      resolve(parentValue, args) {
+        return User.findById(args.id)
       }
     }
   }
