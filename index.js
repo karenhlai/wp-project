@@ -12,8 +12,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB successfully"))
   .catch(err => console.log(err));
 
-
-  app.use(bodyParser.json());
+app.use(bodyParser.json());
   
 // all requests coming in to `graphql` will be handled
 // by the expressGraphQL function from the 'express-graphql' library
