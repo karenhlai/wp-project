@@ -3,9 +3,12 @@ const { GraphQLObjectType, GraphQLList, GraphQLNonNull, GraphQLID } = graphql; /
 
 // import mongoose so we can access our User model in our resolver functions
 const mongoose = require("mongoose");
-const User = mongoose.model("user");
 
 const UserType = require("./user_type");
+const User = mongoose.model("user");
+
+const PostType = require("./post_type");
+const Post = mongoose.model("post");
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -32,7 +35,23 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         return User.findById(args.id)
       }
-    }
+    }, 
+    posts: {
+      // we want all our returned posts in an Array so we use the GraphQLList type
+      type: new GraphQLList(PostType),
+      resolve() {
+        return Post.find({});
+      }
+    },
+    post: {
+      // here we just want to return a single post
+      type: PostType, 
+      // we need an id for this query so we'll use GraphQLNonNull
+      args: { id: { type: GraphQLNonNull(GraphQLID) } }, 
+      resolve(_, {id}) {
+        return Post.findById(id)
+      }
+    },
   }
 });
 

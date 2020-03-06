@@ -6,18 +6,18 @@ const PostSchema = new Schema({
     type: String,
     required: true
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "user"
-  },
   body: {
     type: String,
     required: true
   },
-  date: {
-    type: Date,
-    default: Date.now
-  }
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "user"
+  },
+  // date: {
+  //   type: Date,
+  //   default: Date.now
+  // }
 });
 
 module.exports = mongoose.model("post", PostSchema);
