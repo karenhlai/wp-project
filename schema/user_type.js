@@ -1,16 +1,36 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLID, GraphQLString } = graphql;
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } = graphql;
+
+const mongoose = require("mongoose");
+
+const User = mongoose.model("user");
+// const PostType = require("./post_type");
+// const Post = mongoose.model("post");
 
 const UserType = new GraphQLObjectType({
   // capitalize!
   name: "UserType",
   // fields refers to everything this Type will be able to return to you. Which means all of the
   // data associated with this type in the database. For our User that is id, email, name, and posts.
-  fields: {
+  fields: () => ({
     id: { type: GraphQLID }, // Mongoose automatically generates an ID field for our models
     name: { type: GraphQLString },
-    email: { type: GraphQLString }
-  }
+    email: { type: GraphQLString }, 
+    posts: {
+      // here we are requiring the Post type
+      // If we import the Post type directly in the type value field, we will resolve the circular dependency
+      type: new GraphQLList(require("./post_type")),
+      resolve(parentValue) {
+        debugger
+        return (
+          User.findById(parentValue.id)
+          // populate is a mongoose method
+          .populate("posts")
+          .then(user => user.posts)
+        );
+      }
+    }
+  })
 });
 
 module.exports = UserType;
