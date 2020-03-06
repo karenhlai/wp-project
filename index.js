@@ -7,6 +7,10 @@ const bodyParser = require("body-parser");
 
 const expressGraphQL = require('express-graphql')
 
+const User = require("./models/User");
+
+const schema = require("./schema/schema");
+
 mongoose
   .connect(db)
   .then(() => console.log("Connected to MongoDB successfully"))
@@ -19,6 +23,7 @@ app.use(bodyParser.json());
 app.use(
   "/graphql",
   expressGraphQL({
+    schema,
     graphiql: true
   })
 );
