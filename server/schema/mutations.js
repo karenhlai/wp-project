@@ -1,6 +1,7 @@
 const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLInt } = graphql;
 const mongoose = require("mongoose");
+const AuthService = require("../services/auth");
 
 const UserType = require("./types/user_type");
 const User = mongoose.model("user");
@@ -15,7 +16,7 @@ const mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     // this will be the name of this mutation
-    newUser: {
+    register: {
       // creating a User type
       type: UserType,
       args: {
@@ -24,8 +25,37 @@ const mutation = new GraphQLObjectType({
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve(parentValue, { name, email, password }) {
-        return new User({ name, email, password }).save();
+      resolve(_, args) {
+        // return new User({ name, email, password }).save();
+        return AuthService.register(args)
+      }
+    },
+    logout: {
+      type: UserType, 
+      args: {
+        _id: { type: GraphQLID } 
+      }, 
+      resolve(_, args) {
+        return AuthService.logout(args)
+      }
+    },
+    login: {
+      type: UserType, 
+      args: {
+        email: { type: GraphQLString }, 
+        password: { type: GraphQLString }
+      }, 
+      resolve(_, args) {
+        return AuthService.login(args);
+      }
+    },
+    verifyUser: {
+      type: UserType, 
+      args: {
+        token: { type: GraphQLString }
+      },
+      resolve(_, args) {
+        return AuthService.verifyUser(args);
       }
     },
     newCategory: {
@@ -42,8 +72,8 @@ const mutation = new GraphQLObjectType({
       args: { 
         _id: { type: GraphQLID }
       }, 
-      resolve(_, { id }) {
-        return Category.remove(id);
+      resolve(_, { _id }) {
+        return Category.remove({ _id });
       }
     }, 
     newProduct: {
@@ -62,8 +92,19 @@ const mutation = new GraphQLObjectType({
       args: {
         _id: { type: GraphQLID }
       }, 
-      resolve(_, { id }) {
-        return Product.remove(id);
+      resolve(_, { _id }) {
+        return Product.remove({ _id });
+      }
+    },
+    //change a product's category
+    updateProductCategory: { 
+      type: ProductType, 
+      args: {
+        productId: { type: GraphQLID }, 
+        categoryId: { type: GraphQLID }
+      }, 
+      resolve(_, { productId, categoryId }) {
+        return Product.updateProductCategory(productId, categoryId);
       }
     }
   }

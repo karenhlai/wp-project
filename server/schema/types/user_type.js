@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } = graphql;
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLBoolean } = graphql;
 const mongoose = require("mongoose");
 
 const User = mongoose.model("user");
@@ -15,6 +15,8 @@ const UserType = new GraphQLObjectType({
     _id: { type: GraphQLID }, // Mongoose automatically generates an ID field for our models
     name: { type: GraphQLString },
     email: { type: GraphQLString }, 
+    token: { type: GraphQLString }, 
+    loggedIn: { type: GraphQLBoolean }
   })
 });
 
