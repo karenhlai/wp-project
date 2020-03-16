@@ -1,6 +1,5 @@
 const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } = graphql;
-
 const mongoose = require("mongoose");
 
 const User = mongoose.model("user");
@@ -16,20 +15,6 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLID }, // Mongoose automatically generates an ID field for our models
     name: { type: GraphQLString },
     email: { type: GraphQLString }, 
-    posts: {
-      // here we are requiring the Post type
-      // If we import the Post type directly in the type value field, we will resolve the circular dependency
-      type: new GraphQLList(require("./post_type")),
-      resolve(parentValue) {
-        debugger
-        return (
-          User.findById(parentValue.id)
-          // populate is a mongoose method
-          .populate("posts")
-          .then(user => user.posts)
-        );
-      }
-    }
   })
 });
 

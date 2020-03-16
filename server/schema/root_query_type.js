@@ -4,15 +4,18 @@ const { GraphQLObjectType, GraphQLList, GraphQLNonNull, GraphQLID } = graphql; /
 // import mongoose so we can access our User model in our resolver functions
 const mongoose = require("mongoose");
 
-const UserType = require("./user_type");
+const UserType = require("./types/user_type");
 const User = mongoose.model("user");
 
-const PostType = require("./post_type");
-const Post = mongoose.model("post");
+const CategoryType = require("./types/category_type");
+const Category = mongoose.model("category");
+
+const ProductType = require("./types/product_type");
+const Product = mongoose.model("product");
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
-  fields: {
+  fields: () => ({
     users: {
       // This is the type we defined in the last step,
       // wrapped in a GraphQLList to specify that the data will be returned as an array.
@@ -30,29 +33,41 @@ const RootQuery = new GraphQLObjectType({
       type: UserType,
       // We must define a type for the arguments which will be passed in to the query.
       // GraphQLNonNull specifies that the argument must be include
-      args: { id: { type: new GraphQLNonNull(GraphQLID) }}, 
+      args: { _id: { type: new GraphQLNonNull(GraphQLID) }}, 
        // The args argument represents the *actual* arguments passed into the query
       resolve(parentValue, args) {
-        return User.findById(args.id)
+        return User.findById(args._id)
       }
     }, 
-    posts: {
-      // we want all our returned posts in an Array so we use the GraphQLList type
-      type: new GraphQLList(PostType),
+    categories: {
+      type: new GraphQLList(CategoryType), 
       resolve() {
-        return Post.find({});
+        return Category.find({});
+      }
+    }, 
+    products: {
+      type: new GraphQLList(ProductType), 
+      resolve() {
+        return Product.find({});
       }
     },
-    post: {
-      // here we just want to return a single post
-      type: PostType, 
-      // we need an id for this query so we'll use GraphQLNonNull
-      args: { id: { type: GraphQLNonNull(GraphQLID) } }, 
-      resolve(_, {id}) {
-        return Post.findById(id)
-      }
-    },
-  }
+    // posts: {
+    //   // we want all our returned posts in an Array so we use the GraphQLList type
+    //   type: new GraphQLList(PostType),
+    //   resolve() {
+    //     return Post.find({});
+    //   }
+    // },
+    // post: {
+    //   // here we just want to return a single post
+    //   type: PostType, 
+    //   // we need an id for this query so we'll use GraphQLNonNull
+    //   args: { id: { type: GraphQLNonNull(GraphQLID) } }, 
+    //   resolve(_, {id}) {
+    //     return Post.findById(id)
+    //   }
+    // },
+  })
 });
 
 module.exports = RootQuery;

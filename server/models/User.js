@@ -12,16 +12,18 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true, 
+    min: 8, 
+    max: 32
   },
   date: {
     type: Date,
     default: Date.now
   },
-  posts: [{
-    type: Schema.Types.ObjectId,
-    ref: 'post'
-  }]
+  // posts: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'post'
+  // }]
 });
 
 module.exports = mongoose.model('user', UserSchema);

@@ -7,10 +7,12 @@ const bodyParser = require("body-parser");
 
 const expressGraphQL = require('express-graphql')
 
-const User = require("./models/User");
-const Post = require("./models/Post");
+const User = require("./server/models/User");
+const Product = require("./server/models/Product");
+const Category = require("./server/models/Category");
+// const Post = require("./models/Post");
 
-const schema = require("./schema/schema");
+const schema = require("./server/schema/schema");
 
 mongoose
   .connect(db, { useNewUrlParser: true })
@@ -89,9 +91,6 @@ app.use(bodyParser.json());
 
 
 
-
-
-
   
 // all requests coming in to `graphql` will be handled
 // by the expressGraphQL function from the 'express-graphql' library
@@ -102,6 +101,7 @@ app.use(
     graphiql: true
   })
 );
-// app.get("/", (req, res) => res.send("Hello Woooorld!"));
 
-app.listen(5000, () => console.log("Server is running on port 5000"));
+// app.get("/", (req, res) => res.send("Hello Woooorld!"));
+const port = process.env.PORT || 5000;
+app.listen(5000, () => console.log(`Server is running on port ${port}`));
