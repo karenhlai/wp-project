@@ -2,6 +2,8 @@ const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt } = graphql;
 const mongoose = require("mongoose");
 
+const Product = mongoose.model("product");
+
 const ProductType = new GraphQLObjectType({
   name: "ProductType",
   fields: () => ({

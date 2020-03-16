@@ -24,12 +24,12 @@ const mutation = new GraphQLObjectType({
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve(parentValue, { name, email, password }) {s
+      resolve(parentValue, { name, email, password }) {
         return new User({ name, email, password }).save();
       }
     },
     newCategory: {
-      type: Category,
+      type: CategoryType,
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) }
       }, 
@@ -40,10 +40,10 @@ const mutation = new GraphQLObjectType({
     deleteCategory: {
       type: CategoryType,
       args: { 
-        _id: { type: new GraphQLNonNull(GraphQLID) }
+        _id: { type: GraphQLID }
       }, 
       resolve(_, { id }) {
-        return Category.deleteOne(id);
+        return Category.remove(id);
       }
     }, 
     newProduct: {
@@ -60,10 +60,10 @@ const mutation = new GraphQLObjectType({
     deleteProduct: {
       type: ProductType, 
       args: {
-        _id: { type: new GraphQLNonNull(GraphQLID) }
+        _id: { type: GraphQLID }
       }, 
       resolve(_, { id }) {
-        return Product.deleteOne(id);
+        return Product.remove(id);
       }
     }
   }
