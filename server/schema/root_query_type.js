@@ -3,6 +3,8 @@ const { GraphQLObjectType, GraphQLList, GraphQLNonNull, GraphQLID } = graphql; /
 
 // import mongoose so we can access our User model in our resolver functions
 const mongoose = require("mongoose");
+const axios = require("axios");
+const AWSKey = require("../../config/keys").AWSKey;
 
 const UserType = require("./types/user_type");
 const User = mongoose.model("user");
@@ -12,6 +14,18 @@ const Category = mongoose.model("category");
 
 const ProductType = require("./types/product_type");
 const Product = mongoose.model("product");
+
+
+// AWS Lambda - request rand prices
+ const authOptions = {
+   method: "GET",
+   url: "https://9fliqh7553.execute-api.us-west-1.amazonaws.com/default/generate-price",
+   headers: {
+     "x-api-key": AWSKey
+   }
+ };
+
+
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -45,28 +59,42 @@ const RootQuery = new GraphQLObjectType({
         return Category.find({});
       }
     }, 
+    category: {
+      type: CategoryType,
+      args: { _id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve(_, args) {
+        return Category.findById(args._id);
+      }
+    },
     products: {
       type: new GraphQLList(ProductType), 
       resolve() {
-        return Product.find({});
+        return Product.find({})
+          .then(products => {
+            const productsWithCost = products.map(product => {
+              return axios(authOptions).then(res => {
+                product.cost = res.data.cost;
+                return product;
+              });
+            });
+            return productsWithCost;
+          });
       }
     },
-    // posts: {
-    //   // we want all our returned posts in an Array so we use the GraphQLList type
-    //   type: new GraphQLList(PostType),
-    //   resolve() {
-    //     return Post.find({});
-    //   }
-    // },
-    // post: {
-    //   // here we just want to return a single post
-    //   type: PostType, 
-    //   // we need an id for this query so we'll use GraphQLNonNull
-    //   args: { id: { type: GraphQLNonNull(GraphQLID) } }, 
-    //   resolve(_, {id}) {
-    //     return Post.findById(id)
-    //   }
-    // },
+    product: { 
+      type: ProductType, 
+      args: {
+        _id: { type: new GraphQLNonNull(GraphQLID) }
+      }, 
+      resolve(_, args) {
+        return Product.findOne(args._id).then(product => {
+          return axios(authOptions).then(res => {
+            product.cost = res.data.cost;
+            return product;
+          });
+        });
+      }
+    }
   })
 });
 
