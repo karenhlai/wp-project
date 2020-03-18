@@ -13,7 +13,7 @@ const UserType = new GraphQLObjectType({
   // data associated with this type in the database. For our User that is id, email, name, and posts.
   fields: () => ({
     _id: { type: GraphQLID }, // Mongoose automatically generates an ID field for our models
-    name: { type: GraphQLString },
+    // name: { type: GraphQLString },
     email: { type: GraphQLString }, 
     token: { type: GraphQLString }, 
     loggedIn: { type: GraphQLBoolean }

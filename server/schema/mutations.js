@@ -21,7 +21,7 @@ const mutation = new GraphQLObjectType({
       type: UserType,
       args: {
         // since we need these arguments to make a new user we'll make them GraphQLNonNull
-        name: { type: new GraphQLNonNull(GraphQLString) },
+        // name: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) }
       },

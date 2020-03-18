@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "react-apollo";
+// import ApolloClient from "apollo-boost";
+import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { createHttpLink } from "apollo-link-http";
+import { ApolloProvider } from "react-apollo";
+import { onError } from "apollo-link-error";
+import { ApolloLink } from "apollo-link";
+import { HashRouter } from 'react-router-dom';
+import { VERIFY_USER } from './graphql/mutations';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -17,25 +22,61 @@ document.addEventListener('DOMContentLoaded', () => {
     dataIdFromObject: object => object.id || null
   });
 
+  const httpLink = createHttpLink({
+  uri: "http://localhost:5000/graphql"
+});
 
-  const client = new ApolloClient({
-    // we set Apollo to watch an endpoint
-    uri: "localhost:5000/graphql",
-    onError: ({
-      networkError,
-      graphQLErrors
-    }) => {
-      console.log("graphQLErrors", graphQLErrors);
-      console.log("networkError", networkError);
-    }
-  });
+// make sure we log any additional errors we receive
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
+
+const client = new ApolloClient({
+  link: ApolloLink.from([errorLink, httpLink]), 
+  cache, 
+  onError: ({ networkError, graphQLErrors }) => {
+    console.log("graphQLErrors", graphQLErrors);
+    console.log("networkError", networkError);
+  }
+});
+
+
+// making sure that the token we fetched our of localStorage actually belongs to a logged in User
+// if we have a token we want to verify the user is actually logged in
+const token = localStorage.getItem("auth-token");
+// to avoid components async problems where
+// a component would try to read the cache's value of isLoggedIn
+// before our mutation goes through we can set it up here
+cache.writeData({
+  data: {
+    isLoggedIn: Boolean(token)
+  }
+});
+// then if we do have a token we'll go through with our mutation
+if (token) {
+  client
+    // use the VERIFY_USER mutation directly use the returned data to know if the returned
+    // user is loggedIn
+    .mutate({ mutation: VERIFY_USER, variables: { token } })
+    .then(({ data }) => {
+      cache.writeData({
+        data: {
+          isLoggedIn: data.verifyUser.loggedIn
+        }
+      });
+    });
+}
+
+
 
   // set up the ApolloProvider to wrap around the App component where
   // all our routes will be setup - giving all the components access to
   // the ApolloProvider
   const Root = () => (
     <ApolloProvider client={client}>
-      <App />
+      <HashRouter>
+        <App />
+      </HashRouter>
     </ApolloProvider>
   );
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require("express");
 const app = express();
 const db = require('./config/keys').mongoURI;
+const cors = require("cors");
 
 const bodyParser = require("body-parser");
 
@@ -89,7 +90,7 @@ app.use(bodyParser.json());
 // app.use("/posts", createNewPost);
 
 
-
+app.use(cors());
 
   
 // all requests coming in to `graphql` will be handled
