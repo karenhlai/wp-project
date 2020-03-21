@@ -80,11 +80,18 @@ const mutation = new GraphQLObjectType({
       type: ProductType, 
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) }, 
+        color: { type: new GraphQLNonNull(GraphQLString) }, 
         description: { type: new GraphQLNonNull(GraphQLString) }, 
-        weight: { type: new GraphQLNonNull(GraphQLInt) }
+        measurement: { type: new GraphQLNonNull(GraphQLString) },
+        // cost: { type: new GraphQLNonNull(GraphQLInt) }
       }, 
-      resolve(_, { name, description, weight }) {
-        return new Product({ name, description, weight }).save();
+      resolve(_, { name, color, description, measurement }) {
+        return new Product({
+          name,
+          color,
+          description,
+          measurement,
+        }).save();
       }
     },
     deleteProduct: {

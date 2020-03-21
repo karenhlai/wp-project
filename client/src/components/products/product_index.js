@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Query } from "react-apollo";
 import { FETCH_PRODUCTS } from '../../graphql/queries';
 
@@ -13,7 +14,10 @@ const ProductIndex = () => {
           <ul>
             {data.products.map(product => (
               <li key={product._id}>
-                {product.name}
+                {product.name} <br />
+                {product.color} <br />
+
+              <Link to={`/eyeglasses/${product._id}`}>{product.name}</Link>
               </li>
             ))}
           </ul>
@@ -23,4 +27,4 @@ const ProductIndex = () => {
   );
 }
 
-export default ProductIndex;;
+export default ProductIndex;

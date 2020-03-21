@@ -14,11 +14,19 @@ const ProductSchema = new Schema({
     type: String,
     required: true
   },
+  color: {
+    type: String, 
+    required: true
+  },
   description: {
     type: String,
     required: true
   },
-  weight: {
+  measurement: {
+    type: String,
+    required: true
+  }, 
+  cost: {
     type: Number,
     required: false
   }
