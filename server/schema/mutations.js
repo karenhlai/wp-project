@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLInt } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLFloat } = graphql;
 const mongoose = require("mongoose");
 const AuthService = require("../services/auth");
 
@@ -83,7 +83,7 @@ const mutation = new GraphQLObjectType({
         color: { type: new GraphQLNonNull(GraphQLString) }, 
         description: { type: new GraphQLNonNull(GraphQLString) }, 
         measurement: { type: new GraphQLNonNull(GraphQLString) },
-        // cost: { type: new GraphQLNonNull(GraphQLInt) }
+        // cost: { type: new GraphQLNonNull(GraphQLFloat) }
       }, 
       resolve(_, { name, color, description, measurement }) {
         return new Product({
@@ -113,7 +113,7 @@ const mutation = new GraphQLObjectType({
       resolve(_, { productId, categoryId }) {
         return Product.updateProductCategory(productId, categoryId);
       }
-    }
+    }, 
   }
 });
 

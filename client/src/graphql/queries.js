@@ -10,7 +10,7 @@ export const FETCH_PRODUCTS = gql`
   }
 `;
 
-export const FETCH_PRODUCT = gql `
+export const FETCH_PRODUCT = gql`
   query product($_id: ID!) {
     product(_id: $_id) {
       _id
@@ -18,6 +18,16 @@ export const FETCH_PRODUCT = gql `
       color
       description
       measurement
+      cost
     }
   }
 `;
+
+//fetch existing items in the cart 
+//@client directive so it fetches from the cache
+export const FETCH_CART_ITEMS = gql`
+  query FetchCartItems {
+    cart @client
+  }
+`;
+

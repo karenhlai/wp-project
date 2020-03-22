@@ -62,10 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(({ data }) => {
         cache.writeData({
           data: {
-            isLoggedIn: data.verifyUser.loggedIn
+            isLoggedIn: data.verifyUser.loggedIn,
+            cart: [] //loggedIn users cart
           }
         });
       });
+  } else {
+    // add a cart to our local cache, represented as an array where we can push as many items as we'd like
+    cache.writeData({
+      data: {
+        isLoggedIn: false, 
+        cart: [] //guest cart 
+      }
+    });
   }
 
 
