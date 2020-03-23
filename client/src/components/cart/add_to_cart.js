@@ -1,6 +1,5 @@
 import React from 'react';
-import { Query, Mutation } from "react-apollo";
-import { UPDATE_CART_ITEMS } from '../../graphql/mutations';
+import { Query } from "react-apollo";
 import { FETCH_CART_ITEMS } from '../../graphql/queries';
 import { ApolloClient } from 'apollo-boost';
 import { ApolloConsumer } from "@apollo/react-components";
@@ -17,41 +16,77 @@ import { ApolloConsumer } from "@apollo/react-components";
 class AddToCart extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      action: true, 
+    }
   }
 
-  addCache(cache, product) {
+  checkCart(data) {
+    data.cart.forEach(prod => {
+      if (prod.id === this.props.id) {
+        this.setState({ action: false });
+      }
+    })
+  }
+
+  addToCart(cache, product) {
+    this.setState({ action: false });
     const cart = cache.readQuery({ query: FETCH_CART_ITEMS });
-    console.log(cart)
+    const cartArray = cart.cart;
     cache.writeQuery({
       query: FETCH_CART_ITEMS,
       data: {
-        cart: [ ...cart.cart, product ]
+        // cart: [ ...cart.cart, product ]
+        cart: cartArray.concat(product)
       }
-    })
-    console.log(cache)
+    });
+    console.log(cache.readQuery({ query: FETCH_CART_ITEMS }))
   }
+
+  removeFromCart(cache, product) {
+    this.setState({ action: true });
+    const cart = cache.readQuery({ query: FETCH_CART_ITEMS });
+    const cartArray = cart.cart.filter(prod => {
+      return prod.id !== product.id;
+    });
+    cache.writeQuery({
+      query: FETCH_CART_ITEMS, 
+      data: {
+        cart: cartArray
+      }
+    });
+      console.log(cache.readQuery({
+        query: FETCH_CART_ITEMS
+      }))
+
+  }
+
 
   render() {
     let product = { 
-      id: this.props.id, 
-      cost: this.props.cost
+      id: this.props.id,
+      cost: this.props.cost,
     };
 
     return(
       <Query query={FETCH_CART_ITEMS}>
-        { ({ loading, error, data, client }) => {
+        { ({ loading, error, data, client, refetch }) => {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
-
-          return (
-            <button onClick={() => this.addCache(client, product)}>
-              Add to Cart
-            </button>
-          )
+        
+        return (
+          <div>
+            {this.state.action ? 
+              <button onClick={() => this.addToCart(client, product)}>Add to Cart</button>
+              :
+              <button onClick={() => this.removeFromCart(client, product)}>Remove From Cart</button>
+            }
+          </div>
+        )
         }}
       </Query>
     )
   }
-}
+};
 
 export default AddToCart;

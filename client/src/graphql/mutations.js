@@ -26,10 +26,10 @@ export const VERIFY_USER = gql`
   }
 `;
 
-export const UPDATE_CART_ITEMS = gql `
-  mutation UpdateCartItems($item: String) {
-    updateCartItems(item: $item) {
-      cart @client
-    }
-  }
-`;
+// export const UPDATE_CART_ITEMS = gql `
+//   mutation UpdateCartItems($item: String) {
+//     updateCartItems(item: $item) {
+//       cart @client
+//     }
+//   }
+// `;

@@ -39,11 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log("graphQLErrors", graphQLErrors);
       console.log("networkError", networkError);
     }, 
-    // resolvers: {
-    //   Mutation: {
-    //     updateCartItems: (_, { item }, { cache }) => 
-    //   }
-    // }
   });
 
 
