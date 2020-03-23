@@ -65,6 +65,7 @@ class AddToCart extends React.Component {
   render() {
     let product = { 
       id: this.props.id,
+      name: this.props.name,
       cost: this.props.cost,
     };
 

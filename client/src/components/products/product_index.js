@@ -11,16 +11,18 @@ const ProductIndex = () => {
         if (error) return `Error! ${error.message}`;
 
         return (
-          <ul>
-            {data.products.map(product => (
-              <li key={product._id}>
-                {product.name} <br />
-                {product.color} <br />
+          <div className="product-index-container">
+            <ul>
+              {data.products.map(product => (
+                <li key={product._id}>
+                  {product.name} <br />
+                  {product.color} <br />
 
-              <Link to={`/eyeglasses/${product._id}`}>{product.name}</Link>
-              </li>
-            ))}
-          </ul>
+                <Link to={`/eyeglasses/${product._id}`}>{product.name}</Link>
+                </li>
+              ))}
+            </ul>
+            </div>
         );
       }}
     </Query>

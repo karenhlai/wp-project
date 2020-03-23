@@ -12,6 +12,7 @@ const ProductItem = (props) => {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
         // console.log(data)
+        const name = data.product.name;
         const cost = data.product.cost;
         return (
           <div>
@@ -22,10 +23,10 @@ const ProductItem = (props) => {
             <h1> {data.product.name} </h1>
             <h2>{data.product.color}</h2>
             <p>{data.product.description}</p>
-            {data.product.measurement}
-            {data.product.cost}
+            <p>{data.product.measurement}</p>
+            <p>{data.product.cost}</p>
 
-            <AddToCart id={itemId} cost={cost} />
+            <AddToCart id={itemId} name={name} cost={cost} />
           </div>
         );
       }}
