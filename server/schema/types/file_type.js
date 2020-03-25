@@ -1,0 +1,15 @@
+const graphql = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLUpload } = graphql;
+
+const FileType = new GraphQLObjectType({
+  name: "FileType",
+  // remember we wrap the fields in a thunk to avoid circular dependency issues
+  fields: () => ({
+    _id: { type: GraphQLID },
+    filename: { type: GraphQLString }, 
+    mimetype: { type: GraphQLString }, 
+    encoding: { type: GraphQLString }
+  })
+});
+
+module.exports = FileType;

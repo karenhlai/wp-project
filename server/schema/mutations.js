@@ -1,14 +1,11 @@
 const graphql = require("graphql");
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLBoolean } = graphql;
 const { GraphQLUpload } = require('graphql-upload');
-const { ApolloServer, gql } = require('apollo-server');
+
 const AWS = require('aws-sdk')
 const fs = require('fs');
-
 AWS.config.loadFromPath('./config/credentials.json');
-
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
-
 
 const mongoose = require("mongoose");
 const AuthService = require("../services/auth");
@@ -21,6 +18,10 @@ const Category = mongoose.model("category");
 
 const ProductType = require("./types/product_type");
 const Product = mongoose.model("product");
+
+const FileType = require("./types/file_type");
+
+
 
 const mutation = new GraphQLObjectType({
   name: "Mutation",
@@ -130,7 +131,39 @@ const mutation = new GraphQLObjectType({
         return Product.updateProductCategory(productId, categoryId);
       }
     }, 
-   
+    // uploading a file and saving it into a directory in the file system
+    singleUpload: {
+      type: FileType, 
+      args: {
+        file: { type: GraphQLUpload }
+      }, 
+      resolve(_, { file }) {
+        return file.then(file => {
+          const {createReadStream, filename, mimetype} = file;
+          console.log(filename)
+          const fileStream = createReadStream();
+          fileStream.pipe(fs.createWriteStream(`./uploadedFiles/${filename}`))
+          return file;
+        })
+      }
+    },
+    // streaming to a S3 bucket
+    singleUploadStream: {
+      type: FileType, 
+      args: {
+        file: { type: GraphQLUpload }
+      }, 
+      async resolve(_, { file }) {
+        const file = await file;
+        const {createReadStream, filename, mimetype} = file;
+        const fileStream = createReadStream();
+        const uploadParams = { Bucket: 'warby-barker', Key: filename, Body: fileStream };
+        const result = await s3.upload(uploadParams).promise();
+
+        console.log(`singleUploadStream successful: ${result}`)
+        return file;
+      }
+    },
   }
 });
 

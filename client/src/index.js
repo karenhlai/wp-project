@@ -12,6 +12,8 @@ import { ApolloLink } from "apollo-link";
 import { HashRouter } from 'react-router-dom';
 import { VERIFY_USER } from './graphql/mutations';
 
+import { createUploadLink } from 'apollo-upload-client';
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // This piece on configuration will take EVERY piece of data fetched by the Apollo client
@@ -22,14 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
     dataIdFromObject: object => object.id || null
   });
 
-  const httpLink = createHttpLink({
-    uri: "http://localhost:5000/graphql", 
-    headers: {
-      // pass our token into the header of each request
-      authorization: localStorage.getItem("auth-token")
-    }
-  });
+  // const httpLink = createHttpLink({
+  //   uri: "http://localhost:5000/graphql", 
+  //   headers: {
+  //     // pass our token into the header of each request
+  //     authorization: localStorage.getItem("auth-token"), 
+  //     // "keep-alive": "true"
+  //   }, 
+  // });
 
+ const uploadLink = createUploadLink({
+   uri: 'http://localhost:5000/graphql',
+   headers: {
+     authorization: localStorage.getItem("auth-token"),
+     "keep-alive": "true"
+   }
+ })
 
   // make sure we log any additional errors we receive
   const errorLink = onError(({ graphQLErrors }) => {
@@ -37,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const client = new ApolloClient({
-    link: ApolloLink.from([errorLink, httpLink]), 
+    link: ApolloLink.from([errorLink, uploadLink]), 
     cache, 
     onError: ({ networkError, graphQLErrors }) => {
       console.log("graphQLErrors", graphQLErrors);

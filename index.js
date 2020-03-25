@@ -61,35 +61,6 @@ app.use(bodyParser.json());
 
 // app.use("/users", createNewUser);
 
-
-
-//temporarily add Express Route to post a new Post
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true
-//   })
-// );
-
-// const router = express.Router();
-
-// const createNewPost = router.post("/new", (req, res) => {
-//   // remember to import your Post model from Mongoose!
-//   const newPost = new Post({
-//     title: req.body.title,
-//     body: req.body.body,
-//     author: req.body.author
-//     // date: Date.now,
-//   });
-
-//   newPost
-//     .save()
-//     .then(savedPost => res.json(savedPost))
-//     .catch(err => console.log(err));
-// });
-
-// app.use("/posts", createNewPost);
-
-
 app.use(cors());
 
   
@@ -110,4 +81,4 @@ app.use(
 );
 // app.get("/", (req, res) => res.send("Hello Woooorld!"));
 const port = process.env.PORT || 5000;
-app.listen(5000, () => console.log(`Server is running on port ${port}`));
+app.listen(5000, () => console.log(`Server is running on port 🚀${port}`));
