@@ -24,18 +24,17 @@ const AuthNav = props => {
                     // props.history.push("/");
                   }}>
                     Log Out
-                    </button>
-                {/* < br /> */}
-                <Link to="/cart"><i class="fas fa-shopping-cart"></i></Link>
+                  </button>
+                  <Link to="/cart">View Cart <i className="fas fa-shopping-cart"></i></Link>
               </div>
               )
             } else {
               return (
                 <div className="auth-nav-container">
-                <Link to="/login">Login</Link>
-                {/* < br /> */}
-                <Link to="/register">Register</Link>
-              </div>
+                  <Link to="/login">Login</Link>
+                  <Link to="/register">Register</Link>
+                  {/* <Link to="/cart">View Cart <i className="fas fa-shopping-cart"></i></Link> */}
+                </div>
               )
             }
           }}

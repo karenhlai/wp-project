@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mutation } from "react-apollo";
 import { LOGIN_USER } from '../../graphql/mutations';
 
@@ -7,6 +8,7 @@ class Login extends React.Component {
     super(props);
 
     this.state = {
+      errorMessage: "",
       email: "", 
       password: ""
     };
@@ -29,6 +31,7 @@ class Login extends React.Component {
     return (
       <Mutation
         mutation={LOGIN_USER}
+        onError={err => this.setState({ errorMessage: err.message })}
         onCompleted={data => { //onCompleted:	A callback executed once your mutation successfully completes
           const { token } = data.login;
           localStorage.setItem("auth-token", token);
@@ -39,8 +42,10 @@ class Login extends React.Component {
       >
       
         {loginUser => (
-          <div>
-            <form onSubmit={e => {
+          <div className="user-auth-container">
+            <h1>Sign In</h1>
+            {this.state.errorMessage}
+            <form className="user-auth-form" onSubmit={e => {
               e.preventDefault();
               loginUser({
                 variables: {
@@ -54,6 +59,8 @@ class Login extends React.Component {
               <input type="password" value={this.state.password} onChange={this.update("password")} placeholder="Password" />
               <button type="submit">Log In</button>
             </form>
+            <h1>I'm New Here</h1>
+            <Link to="register">Create an account</Link>
           </div>
         )}
 

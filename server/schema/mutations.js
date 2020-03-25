@@ -1,5 +1,15 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLFloat } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLBoolean } = graphql;
+const { GraphQLUpload } = require('graphql-upload');
+const { ApolloServer, gql } = require('apollo-server');
+const AWS = require('aws-sdk')
+const fs = require('fs');
+
+AWS.config.loadFromPath('./config/credentials.json');
+
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
+
+
 const mongoose = require("mongoose");
 const AuthService = require("../services/auth");
 
@@ -85,13 +95,19 @@ const mutation = new GraphQLObjectType({
         measurement: { type: new GraphQLNonNull(GraphQLString) },
         // cost: { type: new GraphQLNonNull(GraphQLFloat) }
       }, 
-      resolve(_, { name, color, description, measurement }) {
-        return new Product({
-          name,
-          color,
-          description,
-          measurement,
-        }).save();
+      async resolve(_, { name, color, description, measurement }, context) {
+        const validUser = await AuthService.verifyUser({ token: context.token });
+
+        if (validUser.loggedIn) {
+          return new Product({
+            name,
+            color,
+            description,
+            measurement,
+          }).save();
+        } else {
+          throw new Error('Sorry, you need to be logged in to create a product.');
+        }
       }
     },
     deleteProduct: {
@@ -114,6 +130,7 @@ const mutation = new GraphQLObjectType({
         return Product.updateProductCategory(productId, categoryId);
       }
     }, 
+   
   }
 });
 

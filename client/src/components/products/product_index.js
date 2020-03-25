@@ -12,16 +12,16 @@ const ProductIndex = () => {
 
         return (
           <div className="product-index-container">
-            <ul>
               {data.products.map(product => (
-                <li key={product._id}>
-                  {product.name} <br />
-                  {product.color} <br />
-
-                <Link to={`/eyeglasses/${product._id}`}>{product.name}</Link>
-                </li>
+                <ul className="product-index-item" key={product._id}>
+                  <li>
+                    <Link to={`/eyeglasses/${product._id}`}>{product.name}</Link>
+                  </li>
+                  <li>
+                    { product.color }
+                  </li>
+                </ul>
               ))}
-            </ul>
             </div>
         );
       }}

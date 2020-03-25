@@ -26,10 +26,14 @@ export const VERIFY_USER = gql`
   }
 `;
 
-// export const UPDATE_CART_ITEMS = gql `
-//   mutation UpdateCartItems($item: String) {
-//     updateCartItems(item: $item) {
-//       cart @client
-//     }
-//   }
-// `;
+export const CREATE_PRODUCT = gql `
+  mutation CreateProduct($name: String!, $color: String!, $description: String!, $measurement: String!) {
+    createProduct(name: $name, color: $color, description: $description, measurement: $measurement) {
+      name
+      color
+      description
+      measurement
+    }
+  }
+`;
+

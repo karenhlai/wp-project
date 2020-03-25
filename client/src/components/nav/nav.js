@@ -6,11 +6,20 @@ import Logo from '../../images/warby_parker_logo.svg'
 const Nav = () => {
   return (
     <div className="nav-container">
-      <div> </div>
+      <div> 
+        <i className="fas fa-info"></i>
+      </div>
+
+      <div>
+
       <Link to="/">
         <img src={Logo} />
       </Link>
-      <AuthNav />
+      </div>
+
+      <div>
+        <AuthNav />
+      </div>
     </div>
   )
 };

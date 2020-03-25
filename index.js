@@ -97,9 +97,15 @@ app.use(cors());
 // by the expressGraphQL function from the 'express-graphql' library
 app.use(
   "/graphql",
-  expressGraphQL({
-    schema,
-    graphiql: true
+  expressGraphQL(req => {
+    return {
+      schema,
+      // context that will be passed into each resolver; context is an object shared by all resolvers
+       context: {
+         token: req.headers.authorization
+       },
+      graphiql: true
+    }
   })
 );
 // app.get("/", (req, res) => res.send("Hello Woooorld!"));
