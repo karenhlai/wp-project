@@ -4,7 +4,6 @@ import { AuthRoute } from '../util/route_util';
 import ProductIndex from './products/product_index';
 import ProductItem from './products/product_item';
 // import CreateProduct from './products/create_product';
-import UploadFile from './products/upload_file';
 import Register from './user_auth/register';
 import Login from './user_auth/login';
 import CartIndex from './cart/cart_index';
@@ -22,7 +21,6 @@ const App = () => {
         <Route path="/eyeglasses/:id" component={ProductItem} />
         <Route path="/cart" component={CartIndex} />
         {/* <Route path="/create" component={CreateProduct} /> */}
-        <Route path="/upload" component={UploadFile} />
       </Switch>
     </div>
   );

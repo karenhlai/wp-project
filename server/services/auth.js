@@ -88,6 +88,7 @@ const login = async data => {
 // allowing an authenticated user to access protected routes on the frontend, we must pass the user 's authentication with each request and check its validity
 //verify user's token
 const verifyUser = async data => {
+  console.log(data)
   try {
     const { token } = data;
     const decoded = jwt.verify(token, keys);

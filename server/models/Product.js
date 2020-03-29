@@ -6,8 +6,8 @@ const ProductSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
-  category: {
-    type: Schema.Types.ObjectId,
+  categoryId: {
+    type: String,
     ref: "categories"
   },
   name: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Query } from "react-apollo";
 import { FETCH_CART_ITEMS } from '../../graphql/queries';
-import { ApolloClient } from 'apollo-boost';
+// import { ApolloClient } from 'apollo-boost';
 import { ApolloConsumer } from "@apollo/react-components";
 
 //Add to cart => When clicked => 

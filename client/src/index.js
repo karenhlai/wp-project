@@ -2,10 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 // import * as serviceWorker from './serviceWorker';
-// import ApolloClient from "apollo-boost";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { createUploadLink } from 'apollo-upload-client';
-// import { createHttpLink } from "apollo-link-http";
+import { InMemoryCache } from 'apollo-cache-inmemory';
+// import { createUploadLink } from 'apollo-upload-client';
+import { createHttpLink } from "apollo-link-http";
 import ApolloClient from "apollo-client";
 import { ApolloProvider } from "react-apollo";
 import { onError } from "apollo-link-error";
@@ -18,28 +17,28 @@ document.addEventListener('DOMContentLoaded', () => {
     dataIdFromObject: object => object.id || null
   });
 
-  // const httpLink = createHttpLink({
-  //   uri: "http://localhost:5000/graphql", 
-  //   headers: {
-  //     // pass our token into the header of each request
-  //     authorization: localStorage.getItem("auth-token"), 
-  //   }, 
-  // });
+  const httpLink = createHttpLink({
+    uri: "http://localhost:4000/graphql", 
+    headers: {
+      // pass our token into the header of each request
+      authorization: localStorage.getItem("auth-token"), 
+    }, 
+  });
 
- const uploadLink = createUploadLink({
-   uri: 'http://localhost:5000/graphql',
-   headers: {
-     authorization: localStorage.getItem("auth-token"),
-     "keep-alive": "true"
-   }
- });
+//  const uploadLink = createUploadLink({
+//    uri: 'http://localhost:4000/graphql',
+//    headers: {
+//      authorization: localStorage.getItem("auth-token"),
+//      "keep-alive": "true"
+//    }
+//  });
 
   const errorLink = onError(({ graphQLErrors }) => {
     if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
   });
 
   const client = new ApolloClient({
-    link: ApolloLink.from([errorLink, uploadLink]), 
+    link: ApolloLink.from([errorLink, httpLink]), 
     cache, 
     onError: ({ networkError, graphQLErrors }) => {
       console.log("graphQLErrors", graphQLErrors);
