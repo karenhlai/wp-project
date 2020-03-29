@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 
 //file upload items
 const expressGraphQL = require('express-graphql');
-const { graphqlUploadExpress } = require('graphql-upload');
+// const { graphqlUploadExpress } = require('graphql-upload');
 
 const User = require("./server/models/User");
 const Product = require("./server/models/Product");
@@ -21,10 +21,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB successfully"))
   .catch(err => console.log(err));
 
-app.use(bodyParser.json());
-
-
-app.use(cors());
+// app.use(cors());
 
 app.use(
   "/graphql",

@@ -139,11 +139,9 @@ const mutation = new GraphQLObjectType({
         // filename: { type: GraphQLString }, 
         // mimetype: { type: GraphQLString },
         // encoding: { type: GraphQLString }
-        name: { type: GraphQLStnting },
-        size: {type: GraphQLInt},
-        type: {
-            type: GraphQLString
-          }
+        name: { type: GraphQLString },
+        size: { type: GraphQLInt },
+        type: { type: GraphQLString }
       }, 
       async resolve(_, args) {
         console.log(args)
