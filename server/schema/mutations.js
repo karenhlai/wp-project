@@ -1,9 +1,11 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLBoolean } = graphql;
-const { GraphQLUpload } = require('graphql-upload');
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID ,GraphQLBoolean, GraphQLInt } = graphql;
 
+//file upload items
+const { GraphQLUpload } = require('graphql-upload');
 const AWS = require('aws-sdk')
 const fs = require('fs');
+const { createReadStream, createWriteStream } = require('fs');
 AWS.config.loadFromPath('./config/credentials.json');
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
@@ -131,39 +133,35 @@ const mutation = new GraphQLObjectType({
         return Product.updateProductCategory(productId, categoryId);
       }
     }, 
-    // uploading a file and saving it into a directory in the file system
-    singleUpload: {
-      type: FileType, 
-      args: {
-        file: { type: GraphQLUpload }
-      }, 
-      resolve(_, { file }) {
-        return file.then(file => {
-          const {createReadStream, filename, mimetype} = file;
-          console.log(filename)
-          const fileStream = createReadStream();
-          fileStream.pipe(fs.createWriteStream(`./uploadedFiles/${filename}`))
-          return file;
-        })
-      }
-    },
-    // streaming to a S3 bucket
     singleUploadStream: {
-      type: FileType, 
+      type: FileType,
       args: {
-        file: { type: GraphQLUpload }
+        // filename: { type: GraphQLString }, 
+        // mimetype: { type: GraphQLString },
+        // encoding: { type: GraphQLString }
+        name: { type: GraphQLStnting },
+        size: {type: GraphQLInt},
+        type: {
+            type: GraphQLString
+          }
       }, 
-      async resolve(_, { file }) {
-        const file = await file;
-        const {createReadStream, filename, mimetype} = file;
-        const fileStream = createReadStream();
-        const uploadParams = { Bucket: 'warby-barker', Key: filename, Body: fileStream };
-        const result = await s3.upload(uploadParams).promise();
+      async resolve(_, args) {
+        console.log(args)
+        const file = await args.file;
+        console.log(file)
+      // const {createReadStream, filename, mimetype} = file;
+      // const fileStream = createReadStream();
 
-        console.log(`singleUploadStream successful: ${result}`)
-        return file;
+      // const uploadParams = {Bucket: 'warby-barker', Key: filename, Body: fileStream};
+      // const result = await s3.upload(uploadParams).promise()
+
+      // console.log(result)
+
+
+      // return file;
       }
-    },
+    }
+
   }
 });
 

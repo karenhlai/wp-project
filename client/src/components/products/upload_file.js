@@ -1,19 +1,21 @@
 
 import React from 'react';
+import Dropzone from 'react-dropzone'; //allow us to get instance of a file when dropped
 import {ApolloProvider, Mutation} from "react-apollo"
-import gql from "graphql-tag"
+import gql from "graphql-tag";
 import { UPLOAD_FILE, UPLOAD_FILE_STREAM } from '../../graphql/mutations';
 
-const UploadFile = () => {
-  return (
-    <div className="App">
-        <header className="App-header">
-          Test Route
-            <h2>Save Local</h2>
+class UploadFile extends React.Component {
+
+
+  render() {
+    return (
+      <div>
+        <h2>Save Local</h2>
                 <Mutation mutation={UPLOAD_FILE}>
                     {(singleUpload, { data, loading }) => {
                         console.log(data)
-                        return (<form onSubmit={() => {console.log("Upload local - Submitted")}} encType={'multipart/form-data'}>
+                        return (<form onSubmit={() => {console.log("Submitted")}} encType={'multipart/form-data'}>
                                     <input name={'document'} type={'file'} onChange={({target: { files }}) => {
                                         const file = files[0]
                                         file && singleUpload({ variables: { file: file } })
@@ -24,16 +26,19 @@ const UploadFile = () => {
                  <Mutation mutation={UPLOAD_FILE_STREAM}>
                     {(singleUploadStream, { data, loading }) => {
                         console.log(data)
-                        return (<form onSubmit={() => {console.log("Upload aws - Submitted")}} encType={'multipart/form-data'}>
+                        return (
+                        <form onSubmit={() => {console.log("Submitted")}} encType={'multipart/form-data'}>
                                     <input name={'document'} type={'file'} onChange={({target: { files }}) => {
                                         const file = files[0]
+                                        console.log(file)
                                         file && singleUploadStream({ variables: { file: file } })
-                                    }}/>{loading && <p>Loading.....</p>}</form>)}
+                                    }}/>{loading && <p>Loading.....</p>}
+                          </form>)}
                     }
                  </Mutation>
-        </header>
-    </div>
-  );
+      </div>
+    )
+  }
 }
 
 export default UploadFile;

@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { GraphQLObjectType, GraphQLList, GraphQLNonNull, GraphQLID } = graphql; //List allows data to be returned as an array
+const { GraphQLObjectType, GraphQLList, GraphQLNonNull, GraphQLID, GraphQLBoolean } = graphql; //List allows data to be returned as an array
 
 // import mongoose so we can access our User model in our resolver functions
 const mongoose = require("mongoose");
@@ -15,6 +15,7 @@ const Category = mongoose.model("category");
 const ProductType = require("./types/product_type");
 const Product = mongoose.model("product");
 
+const FileType = require("./types/file_type");
 
 // AWS Lambda - request rand prices
  const authOptions = {
@@ -94,7 +95,8 @@ const RootQuery = new GraphQLObjectType({
           });
         });
       }
-    }
+    }, 
+    
   })
 });
 

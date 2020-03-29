@@ -3,10 +3,11 @@ const express = require("express");
 const app = express();
 const db = require('./config/keys').mongoURI;
 const cors = require("cors");
-
 const bodyParser = require("body-parser");
 
-const expressGraphQL = require('express-graphql')
+//file upload items
+const expressGraphQL = require('express-graphql');
+const { graphqlUploadExpress } = require('graphql-upload');
 
 const User = require("./server/models/User");
 const Product = require("./server/models/Product");
@@ -22,63 +23,24 @@ mongoose
 
 app.use(bodyParser.json());
 
-//temporarily add Express Route to post a new User
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true
-//   })
-// );
-
-// const router = express.Router();
-
-// const createNewUser = router.post("/new", (req, res) => {
-//   User.findOne({
-//     email: req.body.email
-//   }).then(user => {
-//     if (user) {
-//       // Throw a 400 error if the email address already exists
-//       return res
-//         .status(400)
-//         .json({
-//           email: "A user has already registered with this address"
-//         });
-//     } else {
-//       // Otherwise create a new user
-//       console.log(req.body);
-//       const newUserObj = new User({
-//         name: req.body.name,
-//         email: req.body.email,
-//         password: req.body.password
-//       });
-
-//       newUserObj
-//         .save()
-//         .then(savedUser => res.json(savedUser))
-//         .catch(err => console.log(err));
-//     }
-//   });
-// });
-
-// app.use("/users", createNewUser);
 
 app.use(cors());
 
-  
-// all requests coming in to `graphql` will be handled
-// by the expressGraphQL function from the 'express-graphql' library
 app.use(
   "/graphql",
+  bodyParser.json(),
   expressGraphQL(req => {
     return {
       schema,
       // context that will be passed into each resolver; context is an object shared by all resolvers
-       context: {
-         token: req.headers.authorization
-       },
+      context: {
+        token: req.headers.authorization
+      },
       graphiql: true
     }
   })
 );
-// app.get("/", (req, res) => res.send("Hello Woooorld!"));
+
+// app.get("/", (req, res) => res.send("Hello World!"));
 const port = process.env.PORT || 5000;
 app.listen(5000, () => console.log(`Server is running on port 🚀${port}`));

@@ -1,25 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import * as serviceWorker from './serviceWorker';
+// import * as serviceWorker from './serviceWorker';
 // import ApolloClient from "apollo-boost";
-import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { createHttpLink } from "apollo-link-http";
+import { createUploadLink } from 'apollo-upload-client';
+// import { createHttpLink } from "apollo-link-http";
+import ApolloClient from "apollo-client";
 import { ApolloProvider } from "react-apollo";
 import { onError } from "apollo-link-error";
 import { ApolloLink } from "apollo-link";
 import { HashRouter } from 'react-router-dom';
 import { VERIFY_USER } from './graphql/mutations';
 
-import { createUploadLink } from 'apollo-upload-client';
-
 document.addEventListener('DOMContentLoaded', () => {
-
-  // This piece on configuration will take EVERY piece of data fetched by the Apollo client
-  // and will map it to it's id.
-  // This allows Apollo to be able to quickly identify records in it's
-  // Store and update them automatically for you based on incoming data from the backend
   const cache = new InMemoryCache({
     dataIdFromObject: object => object.id || null
   });
@@ -29,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
   //   headers: {
   //     // pass our token into the header of each request
   //     authorization: localStorage.getItem("auth-token"), 
-  //     // "keep-alive": "true"
   //   }, 
   // });
 
@@ -39,9 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
      authorization: localStorage.getItem("auth-token"),
      "keep-alive": "true"
    }
- })
+ });
 
-  // make sure we log any additional errors we receive
   const errorLink = onError(({ graphQLErrors }) => {
     if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
   });
@@ -82,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
   } else {
-    // add a cart to our local cache, represented as an array where we can push as many items as we'd like
     cache.writeData({
       data: {
         isLoggedIn: false, 
@@ -90,12 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-
-
-  // set up the ApolloProvider to wrap around the App component where
-  // all our routes will be setup - giving all the components access to
-  // the ApolloProvider
+  
   const Root = () => (
     <ApolloProvider client={client}>
       <HashRouter>
