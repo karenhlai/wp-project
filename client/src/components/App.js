@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { AuthRoute } from '../util/route_util';
+import Splash from './splash/splash';
 import ProductIndex from './products/product_index';
 import ProductItem from './products/product_item';
 // import CreateProduct from './products/create_product';
@@ -17,7 +18,8 @@ const App = () => {
       <Switch>
         <AuthRoute exact path="/login" component={Login} routeType="auth" />
         <AuthRoute exact path="/register" component={Register} routeType="auth" />
-        <Route exact path="/" component={ProductIndex} />
+        <Route exact path="/" component={Splash} />
+        <Route exact path="/eyeglasses" component={ProductIndex} />
         <Route path="/eyeglasses/:id" component={ProductItem} />
         <Route path="/cart" component={CartIndex} />
         {/* <Route path="/create" component={CreateProduct} /> */}

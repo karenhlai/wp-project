@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Query } from "react-apollo";
 import { FETCH_CART_ITEMS } from '../../graphql/queries';
 import CartItem from './cart_item';
@@ -10,7 +11,15 @@ const CartIndex = () => {
       { ({ loading, error, data }) => {
         if (loading) return "Loading...";
         if (error) return `Error! ${error.message}`;
-        data.cart.length === 0 ? cartMessage = "Your cart is empty." : cartMessage = "Your Cart:";
+        data.cart.length === 0 ? 
+          cartMessage = 
+            <div>
+              "Your cart is empty." 
+              <br />
+              <Link to="/">Shop Eyeglasses</Link>
+            </div>
+          : 
+          cartMessage = "Your Cart:";
         
         let cartItems = data.cart.map(item => {
           return (
