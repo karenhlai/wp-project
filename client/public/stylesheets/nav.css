@@ -29,32 +29,25 @@
   margin-left: 16px;
 }
 
-.splash-container {
+.homepage-container {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   position: relative;
   text-align: center;
 }
 
-.splash-container > img{
-  width: 100vw;
+.splash-container > img {
+  width: 80vw;
   height: 100%;
 }
 
-.home-nav {
+.splash-container a {
   position: absolute;
   left: 49%;
   bottom: 5%;
   padding-bottom: 5px;
 }
 
-.home-nav a {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #fff;
-  text-decoration: none;
-  width: 100%;
-  margin: 0 auto;
-}
-
-.home-nav a:hover {
+.splash-container a:hover {
   transition: all .25s;
   border-bottom: 2px solid #fff;
 }
