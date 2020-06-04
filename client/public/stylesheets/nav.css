@@ -29,22 +29,32 @@
   margin-left: 16px;
 }
 
-.splash-container > img{
-  width: 80vw;
-  height: 100%;
-  background-size: cover;
+.splash-container {
+  position: relative;
+  text-align: center;
 }
-/* 
-.splash-container a {
+
+.splash-container > img{
+  width: 100vw;
+  height: 100%;
+}
+
+.home-nav {
   position: absolute;
-  text-decoration: none;
-  color: #fff;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  left: 49%;
+  bottom: 5%;
   padding-bottom: 5px;
 }
 
-.splash-container a:hover {
+.home-nav a {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #fff;
+  text-decoration: none;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.home-nav a:hover {
   transition: all .25s;
   border-bottom: 2px solid #fff;
-  transform: scaleX(1);
-} */
+}

@@ -6,7 +6,9 @@ const Splash = () => {
   return (
     <div className="splash-container">
       <img src={Homepage} />
-      <Link to="/eyeglasses">Shop Eyeglasses</Link>
+      <div className="home-nav">
+        <Link to="/eyeglasses">SHOP EYEGLASSES</Link>
+      </div>
     </div>
   );
 }
