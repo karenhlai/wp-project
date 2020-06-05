@@ -7,6 +7,9 @@
 
 .user-auth-container > h1 {
   color: #555555;
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .user-auth-container > p {
@@ -34,6 +37,7 @@
 .user-auth-form {
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px
 }
 
 .user-auth-form > input, 

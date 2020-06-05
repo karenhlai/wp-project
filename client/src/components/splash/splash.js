@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Homepage from '../../images/homepage.jpg';
+import Homepage_Side_1 from '../../images/homepage_side_1.jpg';
+import Homepage_Side_2 from '../../images/homepage_side_2.jpg';
 
 const Splash = () => {
   return (
@@ -33,6 +35,11 @@ const Splash = () => {
         <br />
         Enjoy!
       </p>
+      
+      <div className="homepage-sidenotes">
+        <img src={Homepage_Side_1} />
+        <img src={Homepage_Side_2} />
+      </div>
     </div>
   );
 }
