@@ -66,5 +66,14 @@
 }
 
 .homepage-sidenotes {
-  display: block;
+  padding-top: 50px;
+  /* display: block; */
 }
+
+.homepage-sidenotes > img {
+  padding: 30px;
+  width: 35%;
+  height: 45%;
+}
+
+
