@@ -13,7 +13,7 @@ const Splash = () => {
       <p>
         Hello, I used this project to practice code, 
         <br />
-        It uses tools like React and Node.
+        It uses tools like React and an environment called Node.
         <br />
         <br />
         In addition, I've added GraphQL in between,
