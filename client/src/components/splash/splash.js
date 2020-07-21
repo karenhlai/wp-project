@@ -12,7 +12,7 @@ const Splash = () => {
         <Link to="/eyeglasses">SHOP EYEGLASSES</Link>
       </div>
 
-      <p>
+      {/* <p>
         Hello, I used this project to practice code, 
         <br />
         It uses tools like React and an environment called Node.
@@ -34,7 +34,7 @@ const Splash = () => {
         <br />
         <br />
         Enjoy!
-      </p>
+      </p> */}
       
       <div className="homepage-sidenotes">
         <img src={Homepage_Side_1} />
