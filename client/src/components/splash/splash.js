@@ -35,7 +35,6 @@ const Splash = () => {
         <br />
         Enjoy!
       </p>
-
       <div className="homepage-sidenotes">
         <img src={Homepage_Side_1} />
         <img src={Homepage_Side_2} />
