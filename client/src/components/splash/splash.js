@@ -11,7 +11,6 @@ const Splash = () => {
         <img src={Homepage} />
         <Link to="/eyeglasses">SHOP EYEGLASSES</Link>
       </div>
-
       <p>
         Hello, I used this project to practice code, 
         <br />
